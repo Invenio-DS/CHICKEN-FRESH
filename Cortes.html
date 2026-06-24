@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>INVENIO - Lista de Precios Chicken Fresh</title>
+    <style>
+        @font-face {
+            font-family: 'HandelsonFour';
+            src: url('./Handelson-Four.otf') format('opentype');
+            font-weight: normal; font-style: normal;
+        }
+
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background-color: #000; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .menu-wrapper {
+            position: relative;
+            width: 100vw; height: 56.25vw; 
+            max-width: 1920px; max-height: 1080px;
+            background-image: url('Cortes-AA.mp4') !important;
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        @keyframes fadeInPrecios {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dato-dinamico {
+            position: absolute;
+            font-family: 'HandelsonFour', sans-serif;
+            color: #FFFFFF;
+            font-size: 1.8vw;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            display: block;
+            text-align: right; 
+            width: 120px; 
+            opacity: 0;
+            animation: fadeInPrecios 0.8s ease-out forwards;
+        }
+
+        /* --- ESTILO PARA ETIQUETA AGOTADO --- */
+        .etiqueta-agotado {
+            position: absolute;
+            background-color: #d32f2f; /* Rojo intenso */
+            color: #ffffff;
+            font-family: 'HandelsonFour', sans-serif, Arial;
+            font-size: 2.5vw;
+            padding: 0.5vw 1.5vw;
+            border-radius: 0.5vw;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            border: 0.2vw solid #fff;
+            transform: rotate(-15deg);
+            z-index: 10;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+            opacity: 0;
+            animation: fadeInPrecios 0.8s ease-out forwards;
+            letter-spacing: 2px;
+        }
+
+        /* --- COORDENADAS 3 COLUMNAS X 2 FILAS --- */
+        .col-izq-ref { left: 14.5%; }
+        .col-izq-bs  { left: 14.5%; }
+    
+        .col-cen-ref { left: 47.5%; } /* Ajustado para mejor centrado visual */
+        .col-cen-bs  { left: 47.5%; }
+
+        .col-der-ref { left: 81.5%; }
+        .col-der-bs  { left: 81.5%; }
+
+        /* Fila Superior */
+        .y-sup-ref { top: 30.5%; }
+        .y-sup-bs  { top: 36.8%; }
+
+        /* Fila Inferior */
+        .y-inf-ref { top: 69.8%; }
+        .y-inf-bs  { top: 76.1%; }
+
+        /* --- SEGURIDAD Y ESTADO --- */
+        #bloqueo-tecnico {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000; color: #fff;
+            display: none; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 9999; text-align: center; font-family: sans-serif;
+        }
+        #bloqueo-tecnico h1 { font-size: 5vw; margin: 0; }
+
+        #debug-status {
+            position: fixed; bottom: 10px; left: 10px;
+            font-size: 16px; z-index: 1000;
+        }
+        .online { color: #00FF00; opacity: 0.3; }
+        .offline { color: #FF0000; opacity: 1; }
+
+    </style>
+</head>
+<body>
+
+    <div id="bloqueo-tecnico">
+        <h1>CONTACTAR AL SERVICIO TÉCNICO</h1>
+    </div>
+
+    <div class="menu-wrapper" id="menu-container"></div>
+    
+    <div id="debug-status"></div>
+
+<script>
+    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5xjPLIwGplpHH4ZkWimjmZ0YX3vMjgYR89RQwT-bBclF4rv1rJrAwPUbjq6QsFRxFfISSbKQ3dwfK/pub?gid=0&single=true&output=csv";
+
+    function parsearCSV(linea) {
+        const columnas = [];
+        let celda = "", dentroComillas = false;
+        for (let char of linea) {
+            if (char === '"') dentroComillas = !dentroComillas;
+            else if (char === ',' && !dentroComillas) {
+                columnas.push(celda.trim());
+                celda = "";
+            } else celda += char;
+        }
+        columnas.push(celda.trim());
+        return columnas;
+    }
+
+    function renderizarMenu(csvText) {
+        const lineas = csvText.split(/\r?\n/).filter(l => l.trim() !== "");
+        const datos = lineas.slice(1); 
+        const contenedor = document.getElementById('menu-container');
+        const pantallaBloqueo = document.getElementById('bloqueo-tecnico');
+        const debug = document.getElementById('debug-status');
+
+        if (csvText.includes("BLOQUEAR")) {
+            pantallaBloqueo.style.display = "flex";
+            contenedor.style.display = "none";
+            debug.innerHTML = "?"; 
+            debug.className = "online";
+            return;
+        } else {
+            pantallaBloqueo.style.display = "none";
+            contenedor.style.display = "block";
+        }
+
+        let htmlFinal = "";
+
+        // Array de 6 posiciones exactas (3 columnas x 2 filas)
+        const cuadrantes = [
+            { ref: "col-izq-ref y-sup-ref", bs: "col-izq-bs y-sup-bs" }, // 1. Punta Trasera
+            { ref: "col-cen-ref y-sup-ref", bs: "col-cen-bs y-sup-bs" }, // 2. Solomo
+            { ref: "col-der-ref y-sup-ref", bs: "col-der-bs y-sup-bs" }, // 3. Tomahawk
+            { ref: "col-izq-ref y-inf-ref", bs: "col-izq-bs y-inf-bs" }, // 4. T-Bone
+            { ref: "col-cen-ref y-inf-ref", bs: "col-cen-bs y-inf-bs" }, // 5. Pollo de Res
+            { ref: "col-der-ref y-inf-ref", bs: "col-der-bs y-inf-bs" }  // 6. Lomito
+        ];
+
+        datos.forEach((linea, i) => {
+            if (i < 6) { // Aumentado a 6 para leer todos los cuadrantes
+                const col = parsearCSV(linea);
+                
+                // Mapeo según tus indicaciones
+                const estado = col[2] ? col[2].toUpperCase().trim() : ""; // Columna C: Estado
+                const precioRef = col[3] ? col[3].trim() : "";            // Columna D: REF
+                const precioBs = col[4] ? col[4].trim() : "";             // Columna E: Bs
+                
+                const pos = cuadrantes[i];
+
+                // Lógica de visualización
+                if (estado === "AGOTADO") {
+                    // Si está agotado, pone el sello y usa las coordenadas de 'ref' modificadas ligeramente para centrar el sello sobre el espacio
+                    htmlFinal += `
+                        <div class="etiqueta-agotado ${pos.ref}" style="margin-top: -1vw; margin-left: -3vw;">AGOTADO</div>
+                    `;
+                } else if (precioRef || precioBs) {
+                    // Si NO está agotado, muestra los precios
+                    htmlFinal += `
+                        <div class="dato-dinamico ${pos.ref}">${precioRef}</div>
+                        <div class="dato-dinamico ${pos.bs}">${precioBs}</div>
+                    `;
+                }
+            }
+        });
+        
+        contenedor.innerHTML = htmlFinal;
+        debug.innerHTML = "?";
+        debug.className = "online";
+    }
+
+    async function sincronizar() {
+        const t = new Date().getTime();
+        const debug = document.getElementById('debug-status');
+        try {
+            const res = await fetch(`${sheetURL}&nocache=${t}`);
+            if (!res.ok) throw new Error();
+            const csvText = await res.text();
+            localStorage.setItem('backup_m2_fresco', csvText);
+            renderizarMenu(csvText);
+        } catch (e) {
+            const backup = localStorage.getItem('backup_m2_fresco');
+            if (backup) renderizarMenu(backup);
+            debug.innerHTML = "?";
+            debug.className = "offline";
+        }
+    }
+
+    sincronizar();
+    setInterval(sincronizar, 120000); // Actualiza cada 2 minutos
+</script>
+</body>
+</html>
