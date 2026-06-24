@@ -2,11 +2,24 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>INVENIO - Menú 2 L'fraisier</title>
+    <title>INVENIO - Lista de Precios Chicken Fresh</title>
     <style>
+        /* --- VARIABLES GLOBALES --- */
+        :root {
+            --red: #dd1518; /* Dorado para el borde del BCV, puedes cambiarlo */
+        }
+
+        /* --- NUEVA FUENTE SANSITA BOLD --- */
         @font-face {
-            font-family: 'HandelsonFour';
-            src: url('./Handelson-Four.otf') format('opentype');
+            font-family: 'SansitaBold';
+            src: url('./Sansita-Bold.ttf') format('truetype');
+            font-weight: bold; font-style: normal;
+        }
+
+        /* Fuente Handelson para la etiqueta de Agotado (opcional mantenerla) */
+        @font-face {
+            font-family: 'SansitaBold';
+            src: url('./Sansita-Bold.ttf') format('truetype');
             font-weight: normal; font-style: normal;
         }
 
@@ -23,7 +36,6 @@
             z-index: 1;
         }
 
-        /* --- ESTILOS DEL VIDEO DE FONDO --- */
         #bg-video {
             position: absolute;
             top: 0;
@@ -31,7 +43,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: 0; /* Detrás de los precios */
+            z-index: 0; 
         }
 
         #precios-container {
@@ -40,7 +52,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 2; /* Sobre el video */
+            z-index: 2; 
         }
 
         @keyframes fadeInPrecios {
@@ -48,16 +60,17 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* --- ESTILOS DE PRECIOS (AHORA CON SANSITA) --- */
         .dato-dinamico {
             position: absolute;
-            font-family: 'HandelsonFour', sans-serif;
+            font-family: 'SansitaBold', sans-serif; /* Cambio de fuente aquí */
             color: #FFFFFF;
-            font-size: 1.8vw;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            font-size: 2vw; /* Ligeramente más grande porque Sansita es más compacta */
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8); /* Sombra más fuerte para mejor lectura */
             white-space: nowrap;
             display: block;
             text-align: right; 
-            width: 150px; /* Un poco más ancho para dar espacio a la separación */
+            width: 150px; 
             opacity: 0;
             animation: fadeInPrecios 0.8s ease-out forwards;
         }
@@ -67,7 +80,7 @@
             position: absolute;
             background-color: #d32f2f; 
             color: #ffffff;
-            font-family: 'HandelsonFour', sans-serif, Arial;
+            font-family: 'HandelsonFour', 'SansitaBold', sans-serif;
             font-size: 2.5vw;
             padding: 0.5vw 1.5vw;
             border-radius: 0.5vw;
@@ -81,6 +94,32 @@
             letter-spacing: 2px;
         }
 
+        /* --- WIDGET TASA BCV --- */
+        .widget-container {
+            position: absolute;
+            top: 4%;    /* Modifica este valor para moverlo arriba/abajo */
+            right: 3%;  /* Modifica este valor para moverlo a izquierda/derecha */
+            z-index: 10;
+        }
+
+        .widget-tasa-rect { 
+            border: 2px solid var(--accent-gold); 
+            border-radius: 8px; 
+            background: rgba(255, 255, 255, 0.95); /* Ligeramente translúcido */
+            display: flex; align-items: center; padding: 6px 11px;
+            width: auto; min-width: 12vw; height: 9vh; gap: 12px;
+            font-family: 'Calibri', sans-serif;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.7);
+        }
+        
+        .tasa-logo { height: 7vh; }
+        .tasa-data { display: flex; flex-direction: column; justify-content: center; text-align: left; }
+        .tasa-label { font-size: 0.9vw; font-weight: bold; color: #1a1a1a; margin-bottom: 1px; }
+        .valor-bcv-container { display: flex; align-items: baseline; gap: 6px; }
+        .valor-bcv { font-size: 1.3vw; font-weight: 800; color: #1a1a1a; }
+        .moneda-label { font-size: 0.8vw; font-weight: bold; color: #444; }
+        #f-bcv { font-size: 0.75vw; color: #1a1a1a; margin-top: 1px; font-weight: bold; }
+
         /* --- COORDENADAS 3 COLUMNAS X 2 FILAS --- */
         .col-izq-ref { left: 14.5%; }
         .col-izq-bs  { left: 14.5%; }
@@ -91,11 +130,9 @@
         .col-der-ref { left: 81.5%; }
         .col-der-bs  { left: 81.5%; }
 
-        /* Fila Superior */
         .y-sup-ref { top: 30.5%; }
         .y-sup-bs  { top: 36.8%; }
 
-        /* Fila Inferior */
         .y-inf-ref { top: 69.8%; }
         .y-inf-bs  { top: 76.1%; }
 
@@ -128,6 +165,21 @@
         <video id="bg-video" autoplay loop muted playsinline>
             <source src="Cortes-AA.mp4" type="video/mp4">
         </video>
+
+        <div class="widget-container">
+            <div class="widget-tasa-rect">
+                <img src="https://drive.google.com/thumbnail?id=1IonvtvVyrtb1zGwggXqcpsSRCEfFfiLd&sz=w1000" class="tasa-logo" alt="BCV">
+                <div class="tasa-data">
+                    <div class="tasa-label">TASA BCV OFICIAL</div>
+                    <div class="valor-bcv-container">
+                        <span id="t-bcv" class="valor-bcv">---</span>
+                        <span class="moneda-label">Bs./USD</span>
+                    </div>
+                    <div id="f-bcv">00/00/0000</div>
+                </div>
+            </div>
+        </div>
+
         <div id="precios-container"></div>
     </div>
     
@@ -150,31 +202,26 @@
         return columnas;
     }
 
-    // Función para limpiar texto y darle formato de sistema decimal latino
     function formatearPrecio(texto, prefijo) {
         if (!texto || texto.trim() === "") return "";
         
-        // Extrae solo los números, puntos y comas de lo que haya en el Excel
         let numStr = texto.replace(/[^\d.,]/g, '');
         if (numStr === "") return texto; 
         
-        // Conversión segura para que JS lo entienda como número
         if (numStr.includes('.') && numStr.includes(',')) {
-            numStr = numStr.replace(/\./g, '').replace(',', '.'); // Ej: 1.200,50 -> 1200.50
+            numStr = numStr.replace(/\./g, '').replace(',', '.'); 
         } else if (numStr.includes(',')) {
-            numStr = numStr.replace(',', '.'); // Ej: 1200,50 -> 1200.50
+            numStr = numStr.replace(',', '.'); 
         }
 
         let numero = parseFloat(numStr);
         if (isNaN(numero)) return texto;
 
-        // Formatea el número al estándar latinoamericano (puntos miles, coma decimales)
         let precioFormateado = new Intl.NumberFormat('es-VE', { 
             minimumFractionDigits: 2, 
             maximumFractionDigits: 2 
         }).format(numero);
 
-        // Devuelve el prefijo separado del monto
         return `${prefijo} ${precioFormateado}`;
     }
 
@@ -216,9 +263,8 @@
                 const precioRefRaw = col[3] ? col[3].trim() : "";            
                 const precioBsRaw = col[4] ? col[4].trim() : "";             
                 
-                // Aplicamos el formateo automático a los datos de la hoja
-                const precioRef = formatearPrecio(precioRefRaw, "REF");
-                const precioBs = formatearPrecio(precioBsRaw, "Bs");
+                const precioRef = formatearPrecio(precioRefRaw, "Ref:");
+                const precioBs = formatearPrecio(precioBsRaw, "Bs.");
 
                 const pos = cuadrantes[i];
 
@@ -235,7 +281,6 @@
             }
         });
         
-        // Se inyecta solo en el contenedor de precios, no tocamos el video
         contenedorPrecios.innerHTML = htmlFinal;
         debug.innerHTML = "●";
         debug.className = "online";
