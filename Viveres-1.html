@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>INVENIO - Lista de Precios Chicken Fresh (Línea de Tiempo)</title>
+    <title>INVENIO - Lista de Precios Chicken Fresh (Lï¿½nea de Tiempo)</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,7 +45,7 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* --- NUEVOS ESTILOS PARA RECTÁNGULOS DE PRECIOS DINÁMICOS --- */
+        /* --- NUEVOS ESTILOS PARA RECTï¿½NGULOS DE PRECIOS DINï¿½MICOS --- */
         .contenedor-precios-dinamico {
             position: absolute;
             display: flex;
@@ -65,7 +65,7 @@
 
         .titulo-tipo {
             color: #FFFFFF;
-            font-size: 1.3vw;
+            font-size: 2.1vw;
             font-weight: 700;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
             margin-bottom: 0.1vw;
@@ -110,14 +110,14 @@
             border: 0.15vw solid #fff;
             box-sizing: border-box;
             letter-spacing: 1px;
-            transform: rotate(-3deg);
+            transform: rotate(-6deg);
         }
 
         /* --- WIDGET TASA BCV --- */
         .widget-container {
             position: absolute;
             top: 4%;    
-            right: 3%;  
+            right: 21.5%;  
             z-index: 10;
         }
 
@@ -160,7 +160,7 @@
 <body>
 
     <div id="bloqueo-tecnico">
-        <h1>CONTACTAR AL SERVICIO TÉCNICO</h1>
+        <h1>CONTACTAR AL SERVICIO Tï¿½CNICO</h1>
     </div>
 
     <div class="menu-wrapper" id="menu-container">
@@ -188,33 +188,33 @@
     <div id="debug-status"></div>
 
 <script>
-    // Nueva URL de tu hoja de cálculo (Gid: 654283172)
+    // Nueva URL de tu hoja de cï¿½lculo (Gid: 654283172)
     var sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5xjPLIwGplpHH4ZkWimjmZ0YX3vMjgYR89RQwT-bBclF4rv1rJrAwPUbjq6QsFRxFfISSbKQ3dwfK/pub?gid=654283172&single=true&output=csv";
 
-    // --- TABLA DE CONFIGURACIÓN DE TIEMPOS Y UBICACIONES (MODIFICABLE) ---
+    // --- TABLA DE CONFIGURACIï¿½N DE TIEMPOS Y UBICACIONES (MODIFICABLE) ---
     // start: segundo en que aparece | end: segundo en que desaparece.
     // Puedes usar top, bottom, left o right para mover las etiquetas por producto.
     var CONFIG_PRODUCTOS = [
-        { row: 1,  start: 0,  end: 8,   bottom: "6%", right: "6%" },
-        { row: 2,  start: 8,  end: 16,  bottom: "6%", right: "6%" },
-        { row: 3,  start: 16, end: 24,  bottom: "6%", right: "6%" },
-        { row: 4,  start: 24, end: 32,  bottom: "6%", right: "6%" },
-        { row: 5,  start: 32, end: 40,  bottom: "6%", right: "6%" },
-        { row: 6,  start: 40, end: 48,  bottom: "6%", right: "6%" },
-        { row: 7,  start: 48, end: 56,  bottom: "6%", right: "6%" },
-        { row: 8,  start: 56, end: 64,  bottom: "6%", right: "6%" },
-        { row: 9,  start: 64, end: 72,  bottom: "6%", right: "6%" },
-        { row: 10, start: 72, end: 83,  bottom: "6%", right: "6%" }
+        { row: 1,  start: 1,  end: 8,   bottom: "6%", right: "6%" },
+        { row: 2,  start: 10,  end: 18,  bottom: "6%", right: "6%" },
+        { row: 3,  start: 19, end: 26,  bottom: "6%", right: "6%" },
+        { row: 4,  start: 28, end: 35,  bottom: "6%", right: "6%" },
+        { row: 5,  start: 37, end: 42,  bottom: "6%", right: "6%" },
+        { row: 6,  start: 43, end: 48,  bottom: "6%", right: "6%" },
+        { row: 7,  start: 51, end: 57,  bottom: "6%", right: "6%" },
+        { row: 8,  start: 59, end: 64,  bottom: "6%", right: "6%" },
+        { row: 9,  start: 66, end: 72,  bottom: "6%", right: "6%" },
+        { row: 10, start: 75, end: 82,  bottom: "6%", right: "6%" }
     ];
 
-    // Índices de lectura para la Tasa BCV (Por defecto: Fila 1, columna 8 / Índice 7)
-    // Cámbialos si moviste la celda de la tasa en este nuevo documento.
-    var TASA_ROW_INDEX = 1;
-    var TASA_COL_INDEX = 9;
+    // ï¿½ndices de lectura para la Tasa BCV (Por defecto: Fila 1, columna 8 / ï¿½ndice 7)
+    // Cï¿½mbialos si moviste la celda de la tasa en este nuevo documento.
+    var TASA_ROW_INDEX = 0;
+    var TASA_COL_INDEX = 8;
 
     var datosGlobales = []; // Guarda las filas del Excel
 
-    // Forzar reproducción del video en TVs
+    // Forzar reproducciï¿½n del video en TVs
     window.addEventListener('DOMContentLoaded', function() {
         var video = document.getElementById('bg-video');
         if (video) {
@@ -222,7 +222,7 @@
         }
     });
 
-    // Escuchador de la línea de tiempo del video
+    // Escuchador de la lï¿½nea de tiempo del video
     var videoElement = document.getElementById('bg-video');
     videoElement.addEventListener('timeupdate', function() {
         if (datosGlobales.length === 0) return;
@@ -230,7 +230,7 @@
         var currentTime = videoElement.currentTime;
         var productoActivo = null;
 
-        // Buscar si algún producto debe mostrarse en este segundo exacto
+        // Buscar si algï¿½n producto debe mostrarse en este segundo exacto
         for (var i = 0; i < CONFIG_PRODUCTOS.length; i++) {
             var prod = CONFIG_PRODUCTOS[i];
             if (currentTime >= prod.start && currentTime <= prod.end) {
@@ -306,7 +306,7 @@
             datosGlobales.push(parsearCSV(datos[i]));
         }
 
-        // Procesar Tasa BCV Dinámica
+        // Procesar Tasa BCV Dinï¿½mica
         if (datosGlobales.length > TASA_ROW_INDEX) {
             var filaTasa = datosGlobales[TASA_ROW_INDEX];
             var tasaBCV = filaTasa[TASA_COL_INDEX] ? filaTasa[TASA_COL_INDEX].trim() : "---"; 
@@ -329,14 +329,14 @@
         var col = datosGlobales[filaIndex];
         
         // Mapeo de columnas solicitado por el cliente:
-        var agotadoBulto = col[1] ? col[1].toUpperCase().trim() : ""; 
-        var agotadoDetal = col[2] ? col[2].toUpperCase().trim() : ""; 
-        var refBulto     = formatearPrecio(col[3], "Ref:");
-        var refDetal     = formatearPrecio(col[4], "Ref:");
-        var bsBulto      = formatearPrecio(col[5], "Bs.");
-        var bsDetal      = formatearPrecio(col[6], "Bs.");
+        var agotadoBulto = col[2] ? col[2].toUpperCase().trim() : ""; 
+        var agotadoDetal = col[3] ? col[3].toUpperCase().trim() : ""; 
+        var refBulto     = formatearPrecio(col[4], "Ref:");
+        var refDetal     = formatearPrecio(col[5], "Ref:");
+        var bsBulto      = formatearPrecio(col[6], "Bs.");
+        var bsDetal      = formatearPrecio(col[7], "Bs.");
 
-        // Construcción de la columna POR BULTO
+        // Construcciï¿½n de la columna POR BULTO
         var htmlBulto = "";
         if (agotadoBulto === "AGOTADO") {
             htmlBulto = '<div class="bloque-agotado">AGOTADO</div>';
@@ -345,7 +345,7 @@
                         '<div class="bloque-precio bs-box">' + bsBulto + '</div>';
         }
 
-        // Construcción de la columna AL DETAL
+        // Construcciï¿½n de la columna AL DETAL
         var htmlDetal = "";
         if (agotadoDetal === "AGOTADO") {
             htmlDetal = '<div class="bloque-agotado">AGOTADO</div>';
@@ -354,7 +354,7 @@
                         '<div class="bloque-precio bs-box">' + bsDetal + '</div>';
         }
 
-        // Configuración dinámica de ubicación CSS
+        // Configuraciï¿½n dinï¿½mica de ubicaciï¿½n CSS
         var estilosPosicion = "";
         if (prodConfig.top) estilosPosicion += "top:" + prodConfig.top + ";";
         if (prodConfig.bottom) estilosPosicion += "bottom:" + prodConfig.bottom + ";";
