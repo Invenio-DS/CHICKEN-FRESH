@@ -150,7 +150,7 @@
 <body>
 
     <div id="bloqueo-tecnico">
-        <h1>CONTACTAR AL SERVICIO TÉCNICO</h1>
+        <h1>CONTACTAR AL SERVICIO TÃ‰CNICO</h1>
     </div>
 
     <div class="menu-wrapper" id="menu-container">
@@ -236,7 +236,7 @@
             contenedorWrapper.style.display = "block";
         }
 
-        // --- EXTRACCIÓN DE LA TASA BCV (CELDA F2) ---
+        // --- EXTRACCIÃ“N DE LA TASA BCV (CELDA F2) ---
         if (datos.length > 0) {
             const primeraFila = parsearCSV(datos[0]);
             const tasaBCV = primeraFila[5] ? primeraFila[5].trim() : "---"; 
@@ -285,7 +285,7 @@
             }
         });
         
-        // OPTIMIZACIÓN: Solo actualiza el HTML si hubo un cambio real en el Excel. Evita parpadeos cada 2 minutos.
+        // OPTIMIZACIÃ“N: Solo actualiza el HTML si hubo un cambio real en el Excel. Evita parpadeos cada 2 minutos.
         if (contenedorPrecios.innerHTML !== htmlFinal) {
             contenedorPrecios.innerHTML = htmlFinal;
         }
